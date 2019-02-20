@@ -8,22 +8,21 @@ from sqlalchemy import create_engine
 Base = declarative_base()
  
 class User(Base):
-    __tablename__ = 'restaurant'
+    __tablename__ = 'user'
    
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    username = Column(String(250), nullable=False)
+    pwd = Column(String(12), nullable=False)
  
-class MenuItem(Base):
-    __tablename__ = 'menu_item'
+class Item(Base):
+    __tablename__ = 'item'
 
-
-    name =Column(String(80), nullable = False)
     id = Column(Integer, primary_key = True)
+    name = Column(String(80), nullable = False)
     description = Column(String(250))
-    price = Column(String(8))
-    course = Column(String(250))
-    restaurant_id = Column(Integer,ForeignKey('restaurant.id'))
-    restaurant = relationship(Restaurant) 
+    category = Column(String(250))
+    user_id = Column(Integer,ForeignKey('user.id'))
+    user = relationship(User) 
 
 #We added this serialize function to be able to send JSON objects in a serializable format
     @property
@@ -33,8 +32,7 @@ class MenuItem(Base):
            'name'       : self.name,
            'description': self.description,
            'id'         : self.id,
-           'price'      : self.price,
-           'course'     : self.course,
+           'category'      : self.category
        }
  
 
