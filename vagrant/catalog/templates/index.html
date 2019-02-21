@@ -4,39 +4,56 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>{% block title %}{% endblock %} - ItemCatalog</title>
+  <title>{% block title %}Home{% endblock %} - ItemCatalog</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/navbarStyle.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
 </head>
 
 <body>
   <div class="container">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-static-top navbar-expand-lg navbar-dark bg-dark">
       <ul class="navbar-nav mr-auto">
-        {% if g.user %}
-        <li class="nav-item"><span>{{ g.user['username'] }}</span></li>
-        <li class="nav-item"><span>Welcome {{ g.user['username'] }}</span></li>
-        <li>
-          <button type="button" class="btn btn-secondary">
-            <a href="{{ url_for('logout') }}">Log out</a>
-          </button>
-        </li>
-        {% else %}
+        {% block content %}
         <li class="nav-item">
           <button id="g" type="button" class="btn btn-success">
             <a href="{{ url_for('register') }}">Register</a>
           </button>
         </li>
-        &nbsp;
         <li class="nav-item">
           <button type="button" class="btn btn-primary">
             <a href="{{ url_for('login') }}">Login</a>
           </button>
         </li>
-        {% endif %}
+        {% endblock %}
       </ul>
     </nav>
+
+    {% block cards %}
+    <div class="accordion" id="accordionExample">
+        {% if items %}
+            {% for item in items %}
+      <div class="card">
+        <div class="card-header" id="{{ 'heading'~item.id }}">
+          <h2 class="mb-0">
+            <button class="btn btn-link" type="button" data-toggle="collapse" data-target={{ "#collapse"~item.id }}
+              aria-expanded="true" aria-controls="collapseOne">
+              {{ item.name }}
+            </button>
+          </h2>
+        </div>
+
+        <div id="{{ 'collapse'~item.id }}" class="collapse show" aria-labelledby="{{ 'heading'~item.id }}" data-parent="#accordionExample">
+          <div class="card-body">
+            {{ item.description }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+    {% endblock %}
   </div>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -49,4 +66,5 @@
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
     crossorigin="anonymous"></script>
 </body>
+
 </html>

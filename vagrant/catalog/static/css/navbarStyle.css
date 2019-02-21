@@ -4,6 +4,17 @@ a:active { text-decoration: none;color: white}
 a:hover { text-decoration: none;color: white} 
 a:visited { text-decoration: none;color: white}
 
-nav {
-    background-color:#e3f2
+
+.navbar-nav > li{
+    padding-left:20px;
+    padding-right:20px;
+    display: inline-block;
+  }
+
+#logout {
+    margin-top: 15px;
+}
+
+#userInfo {
+    margin-top: 10px;
 }

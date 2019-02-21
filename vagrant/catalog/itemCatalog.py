@@ -5,7 +5,7 @@ from oauth2client.client import FlowExchangeError
 from oauth2client.client import flow_from_clientsecrets
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import create_engine
-from flask import Flask, render_template, request, redirect,  current_app, g, url_for, flash, jsonify, session as login_session
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session as login_session
 import random
 import string
 from datetime import datetime
@@ -16,11 +16,6 @@ app = Flask(__name__)
 engine = create_engine('sqlite:///itemCatalog.db')
 Base.metadata.bind = engine
 
-
-with app.app_context():
-    g.user = {
-        "username":"admin"
-    }
 
 DBSession = sessionmaker(bind=engine)
 session = scoped_session(DBSession)
@@ -58,28 +53,47 @@ def login():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
     for x in xrange(32))
     login_session['state'] = state
-    return render_template('signin.html', STATE=state)
+    if (request.method == 'POST'):
+        username = request.form['username']
+        pwd = request.form['password']
+        user = session.query(User).filter_by(username = username).first()
+        if (user == None):
+            flash("The username does not exist!")
+            return render_template('signin.html', STATE=state)
+        elif (validateLogin(username, pwd) == False):
+            flash("Incorrect username or password!")
+            return render_template('signin.html', STATE=state)
+        else:
+            return redirect(url_for('userIndex', username=username))
+    else:
+        return render_template('signin.html', STATE=state)
 
 @app.route('/logout')
 def logout():
-    return 'logout'
+    return redirect(url_for('login'))
 
 @app.route('/user/<string:username>/index')
 def userIndex(username):
-    return 'userIndex'
+    user = session.query(User).filter_by(username = username).one()
+    items = session.query(Item).all()
+    return render_template('userIndex.html', items=items, username = username, id = user.id)
 
 @app.route('/user/<string:username>/add', methods = ['GET', 'POST'])
 def add(username):
     if request.method == 'POST':
-        newItem = Item(
-            name = request.form['name'],
-            description = request.form['description'],
-            category = request.form['category'],
-            user_id = request.form['user_id']
-                    )
-        session.add(newItem)
-        session.commit()
-        return redirect(url_for('userIndex', username = username))
+        if (checkDuplicateItem == False):
+            newItem = Item(
+                name = request.form['name'],
+                description = request.form['description'],
+                category = request.form['category'],
+                user_id = request.form['user_id']
+                        )
+            session.add(newItem)
+            session.commit()
+            return redirect(url_for('userIndex', username = username))
+        else :
+            flash("The item is already in the catalog!")
+            return redirect(url_for('userIndex', username = username)) 
     else :
         return render_template('addItem.html', username = username)
 
