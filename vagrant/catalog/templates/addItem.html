@@ -1,0 +1,55 @@
+{% extends "index.html" %}
+{% block title %}{{ username }}{% endblock %}
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    .important {
+        color: #336699;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/signin.css') }}">
+{% endblock %}
+
+<body>
+    <div class="container">
+        {% block content %}
+        <li>
+            <div id="userInfo" class="alert alert-success" role="alert">
+                Welcome {{ username }}
+            </div>
+        </li>
+        <li>
+            <button id="logout" type="button" class="btn btn-secondary">
+                <a href="{{ url_for('userIndex', username = username) }}">Go back</a>
+            </button>
+        </li>
+        {% endblock %}
+        {% block cards %}
+        <form class="text-center form-addItem" method="POST">
+            <br />
+            <div id="notif" class="alert alert-info" role="alert">
+                Please provide item information
+            </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-warning" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <label for="itemName" class="sr-only">ItemName</label>
+            <input type="text" id="inputItemName" class="form-control" name="itemName" placeholder="Item Name"
+                required="" autofocus="true">
+            <label for="category" class="sr-only">Category</label>
+            <input type="text" id="inputCategory" class="form-control" name="category" placeholder="Category"
+                required="">
+            <label for="Description" class="sr-only"></label>
+            <textarea name="description" placeholder="Enter item description here (Max 250 characters)" class="form-control" rows="5"
+                id="comment"></textarea>
+            <button type='submit' class="btn btn-block btn-primary">Submit</button>
+        </form>
+        {% endblock %}
+    </div>
+</body>

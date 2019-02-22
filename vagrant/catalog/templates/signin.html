@@ -32,7 +32,8 @@
     <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required="">
     <input type="checkbox" value="remember-me"> Remember me
     <button class="btn btn-block btn-primary" type='submit'>Login</button>
-    <a href="{{url_for('register')}}" class="btn btn-block btn-secondary">Register</a><br>
+    <a href="{{url_for('register')}}" class="btn btn-block btn-secondary">Register</a>
+    <a href="{{url_for('index')}}" class="btn btn-block btn-info">login later</a><br/>
     <h5 class="h5 mb-5 font-weight-bolder">Sign in with third-party account</h5>
     <div id="signinButton">
       <span class="g-signin" data-scope="openid email" data-clientid="PLACE YOUR CLIENT ID HERE"

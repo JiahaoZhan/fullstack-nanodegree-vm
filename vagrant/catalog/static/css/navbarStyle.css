@@ -4,12 +4,16 @@ a:active { text-decoration: none;color: white}
 a:hover { text-decoration: none;color: white} 
 a:visited { text-decoration: none;color: white}
 
-
 .navbar-nav > li{
     padding-left:20px;
     padding-right:20px;
     display: inline-block;
-  }
+}
+
+.navbar {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+}
 
 #logout {
     margin-top: 15px;
@@ -17,4 +21,8 @@ a:visited { text-decoration: none;color: white}
 
 #userInfo {
     margin-top: 10px;
+}
+
+#addItem {
+    margin-top: 15px;
 }

@@ -81,19 +81,21 @@ def userIndex(username):
 @app.route('/user/<string:username>/add', methods = ['GET', 'POST'])
 def add(username):
     if request.method == 'POST':
-        if (checkDuplicateItem == False):
+        name = request.form['itemName']
+        if (checkDuplicateItem(name) == False):
+            user = session.query(User).filter_by(username = username).one()
             newItem = Item(
-                name = request.form['name'],
+                name = name,
                 description = request.form['description'],
                 category = request.form['category'],
-                user_id = request.form['user_id']
+                user_id = user.id
                         )
             session.add(newItem)
             session.commit()
             return redirect(url_for('userIndex', username = username))
         else :
-            flash("The item is already in the catalog!")
-            return redirect(url_for('userIndex', username = username)) 
+            flash("The item is already in the catalog!") 
+            return redirect(url_for('add', username = username)) 
     else :
         return render_template('addItem.html', username = username)
 
@@ -103,7 +105,12 @@ def edit(username, itemId):
 
 @app.route('/user/<string:username>/<int:itemId>/delete', methods = ['GET', 'POST'])
 def delete(username, itemId):
-    return 'delete'
+    itemToDelete = session.query(Item).filter_by(id = itemId).one()
+    session.delete(itemToDelete)
+    session.commit()
+    return redirect(url_for('userIndex', username = username))
+      
+    
 
 if __name__ == '__main__':
     app.secret_key = "secret"

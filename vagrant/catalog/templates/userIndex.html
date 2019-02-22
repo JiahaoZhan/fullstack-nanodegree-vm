@@ -18,44 +18,51 @@
             </div>
         </li>
         <li>
-            <button id="logout" type="button" class="btn btn-secondary">
+            <button id="logout" type="button" class="btn btn-warning">
                 <a href="{{ url_for('logout') }}">Log out</a>
             </button>
         </li>
+        <li>
+            <button id="addItem" type="button" class="btn btn-success">
+                <a href="{{ url_for('add', username = username) }}">Add item</a>
+            </button>
+        </li>
         {% endblock %}
-    </div>
 
-    {% block cards %}
-    <div class="accordion" id="accordionExample">
-        {% if items %}
-        {% if username %}
-        {% for item in items %}
-        <div class="card">
-            <div class="card-header" id="{{ 'heading'~item.id }}">
-                <h2 class="mb-0">
-                    <h3 class="sm-0">{{ item.name }} - {{ item.category }}</h3>
-                    <a class="btn btn-link" type="button" data-toggle="collapse"
-                        data-target={{ "#collapse"~item.id }} aria-expanded="true" aria-controls="collapseOne">
-                        Detail
-                    </a>
-                    {% if item.user_id == id %}
-                    <a class="btn btn-link btn-dark" type="button" href="{{ url_for('edit', username='username', itemId = item.id ) }} ">Edit</a>
-                    <a class="btn btn-link btn-dark" type="button" href="{{ url_for('delete', username='username', itemId = item.id ) }} ">Delete</a>
-                    {% endif %}
-                </h2>
-            </div>
+        {% block cards %}
+        <div class="accordion" id="accordionExample">
+            {% if items %}
+            {% if username %}
+            {% for item in items %}
+            <div class="card">
+                <div class="card-header" id="{{ 'heading'~item.id }}">
+                    <h2 class="mb-0">
+                        <h3 class="sm-0">{{ item.name }} - {{ item.category }}</h3>
+                        <a class="btn btn-link" type="button" data-toggle="collapse"
+                            data-target={{ "#collapse"~item.id }} aria-expanded="true" aria-controls="collapseOne">
+                            Detail
+                        </a>
+                        {% if item.user_id == id %}
+                        <a class="btn btn-link btn-dark" type="button"
+                            href="{{ url_for('edit', username = username, itemId = item.id ) }} ">Edit</a>
+                        <a class="btn btn-link btn-dark" type="button"
+                            href="{{ url_for('delete', username = username, itemId = item.id ) }} ">Delete</a>
+                        {% endif %}
+                    </h2>
+                </div>
 
-            <div id="{{ 'collapse'~item.id }}" class="collapse show" aria-labelledby="{{ 'heading'~item.id }}"
-                data-parent="#accordionExample">
-                <div class="card-body">
-                    {{ item.description }}
+                <div id="{{ 'collapse'~item.id }}" class="collapse show" aria-labelledby="{{ 'heading'~item.id }}"
+                    data-parent="#accordionExample">
+                    <div class="card-body">
+                        {{ item.description }}
+                    </div>
                 </div>
             </div>
+            {% endfor %}
+            {% endif %}
+            {% endif %}
         </div>
-        {% endfor %}
-        {% endif %}
-        {% endif %}
+        {% endblock %}
     </div>
-    {% endblock %}
     </div>
 </body>

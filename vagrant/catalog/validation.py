@@ -9,7 +9,7 @@ def checkDuplicateUser(username):
         return True
 
 def checkDuplicateItem(itemName):
-    item = session.query(Item).filter_by(itemName = itemName).first()
+    item = session.query(Item).filter_by(name = itemName).first()
     if (item == None):
         return False
     else: 
