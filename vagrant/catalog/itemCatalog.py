@@ -101,7 +101,25 @@ def add(username):
 
 @app.route('/user/<string:username>/<int:itemId>/edit', methods = ['GET', 'POST'])
 def edit(username, itemId):
-    return 'edit'
+    if request.method == 'POST':
+        if request.form['name']:
+            name = request.form['itemName']
+        if request.form['itemName']:
+            editedItem.name = request.form['itemName']
+        if request.form['category']:
+            editedItem.description = request.form['category']
+        if request.form['description']:
+            editedItem.description = request.form['description']
+            session.add(editedItem)
+            session.commit()
+            return redirect(url_for('userIndex', username = username))
+        else:
+            flash("The item name has already been taken!")
+            return redirect(url_for('edit', username = usernamem, itemId = itemId))
+    else:
+        return render_template('editItem.html', username = username)
+
+
 
 @app.route('/user/<string:username>/<int:itemId>/delete', methods = ['GET', 'POST'])
 def delete(username, itemId):
